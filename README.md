@@ -1,16 +1,26 @@
-# seed_app
+# 🌱 Seed Shop App
 
-A new Flutter project.
+Flutter приложение для магазина семян растений с Firebase бэкендом.
 
-## Getting Started
+## 🚀 Функциональность
 
-This project is a starting point for a Flutter application.
+- 📦 Каталог товаров с поиском и фильтрацией
+- ❤️ Избранное (синхронизация через Firestore)
+- 🛒 Корзина покупок
+- 👤 Авторизация (Яндекс + анонимная)
+- 🔥 Firebase Backend
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠 Технологии
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Flutter** - фреймворк
+- **Firebase** - бэкенд (Auth + Firestore)
+- **Provider** - управление состоянием
+- **Material Design** - UI
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📦 Установка
+
+```bash
+git clone https://github.com/Beslan06/seed_shop_app.git
+cd seed_shop_app
+flutter pub get
+flutter run
