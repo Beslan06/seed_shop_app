@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.seed_app"
+    namespace = "com.example.seed_app.seed_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.seed_app"
+        applicationId = "com.example.seed_app.seed_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -31,23 +31,10 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
-
-            // Включение минификации и обфускации
-            isMinifyEnabled = true
-            // Включение сжатия ресурсов
-            isShrinkResources = true
-            // ProGuard правила
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-        }
-        
-        // Добавьте этот блок для debug APK
-        getByName("debug") {
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-DEBUG"
         }
     }
 }
