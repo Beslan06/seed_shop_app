@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "869040939541",
+    "project_id": "seedshop-68662",
+    "storage_bucket": "seedshop-68662.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:869040939541:android:6dd7d5d3db3f7bbe55641c",
+        "android_client_info": {
+          "package_name": "com.example.seed_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDserGXlstu4UuY5GTT51v9Lql-lnUipmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
