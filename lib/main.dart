@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'screens/home_screen.dart';
 import 'services/cart_service.dart';
-import 'services/favorites_service.dart'; // ДОБАВЛЕНО
+import 'services/favorites_service.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -17,22 +17,19 @@ void main() async {
     );
     print('✅ Firebase подключен успешно!');
 
-    // ДАВАЙ ПРОВЕРИМ ЗАПИСЬ В FIRESTORE
+    // Опционально: тестовая запись (можно убрать в продакшене)
     await _testFirestoreConnection();
   } catch (e) {
     print('❌ Ошибка Firebase: $e');
+    // Даже при ошибке Firebase — запускаем приложение (например, для offline-режима)
   }
 
+  // runApp вызывается ТОЛЬКО после await
   runApp(const MyApp());
 }
 
-// Функция для тестирования Firestore
 Future<void> _testFirestoreConnection() async {
   try {
-    // Ждем немного чтобы Firebase полностью инициализировался
-    await Future.delayed(const Duration(seconds: 1));
-
-    // Записываем тестовые данные
     await FirebaseFirestore.instance
         .collection('test_app')
         .doc('connection_test')
@@ -55,11 +52,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      // ИЗМЕНЕНО: ChangeNotifierProvider на MultiProvider
       providers: [
         ChangeNotifierProvider(create: (context) => CartService()),
-        ChangeNotifierProvider(
-            create: (context) => FavoritesService()), // ДОБАВЛЕНО
+        ChangeNotifierProvider(create: (context) => FavoritesService()),
       ],
       child: MaterialApp(
         title: 'Магазин семян "Урожай"',

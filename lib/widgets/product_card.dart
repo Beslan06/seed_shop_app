@@ -1,5 +1,7 @@
+// lib/widgets/product_card.dart
 import 'package:flutter/material.dart';
 import '../models/product.dart';
+import '../services/cart_service.dart'; // ← Добавляем импорт
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -7,6 +9,7 @@ class ProductCard extends StatelessWidget {
   final VoidCallback onFavoriteToggle;
   final bool isFavorite;
   final bool showFavoriteButton; // Новая опция
+  final CartService cartService; // ← Добавляем сервис корзины
 
   const ProductCard({
     super.key,
@@ -15,6 +18,7 @@ class ProductCard extends StatelessWidget {
     required this.onFavoriteToggle,
     required this.isFavorite,
     this.showFavoriteButton = true, // По умолчанию показываем кнопку
+    required this.cartService, // ← Обязательный параметр
   });
 
   @override
@@ -42,6 +46,9 @@ class ProductCard extends StatelessWidget {
 
               // Кнопка избранного (если разрешено)
               if (showFavoriteButton) _buildFavoriteButton(),
+
+              // Кнопка добавления в корзину — только если в наличии
+              if (product.inStock) _buildAddToCartButton(context),
             ],
           ),
         ),
@@ -106,14 +113,20 @@ class ProductCard extends StatelessWidget {
         _buildCategoryChip(),
         const SizedBox(height: 6),
 
-        // Цена
-        Text(
-          '${product.price} ₽',
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.green,
-          ),
+        // Цена + Корзина (в одной строке)
+        Row(
+          children: [
+            Text(
+              '${product.price} ₽',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
+            ),
+            const SizedBox(width: 8),
+            // Здесь будет кнопка корзины — но она уже вынесена в отдельный виджет выше
+          ],
         ),
         const SizedBox(height: 4),
 
@@ -180,6 +193,30 @@ class ProductCard extends StatelessWidget {
         size: 24,
       ),
       tooltip: isFavorite ? 'Удалить из избранного' : 'Добавить в избранное',
+    );
+  }
+
+  Widget _buildAddToCartButton(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        // Добавляем товар в корзину
+        cartService.addToCart(product);
+
+        // Показываем SnackBar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('✅ ${product.name} добавлен в корзину'),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      },
+      icon: Icon(
+        Icons.shopping_cart_outlined,
+        color: Colors.green,
+        size: 24,
+      ),
+      tooltip: 'Добавить в корзину',
     );
   }
 

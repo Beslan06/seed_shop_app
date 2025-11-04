@@ -7,6 +7,7 @@ import '../widgets/product_card.dart';
 import 'product_detail_screen.dart';
 import 'home_screen.dart';
 import '../services/favorites_service.dart';
+import '../services/cart_service.dart'; // ← добавили импорт
 
 class CatalogScreen extends StatefulWidget {
   const CatalogScreen({super.key});
@@ -42,13 +43,11 @@ class _CatalogScreenState extends State<CatalogScreen> {
     return products;
   }
 
-  // ОБНОВЛЕННЫЙ МЕТОД: С проверкой авторизации
   Future<void> _toggleFavorite(BuildContext context, Product product) async {
     final favoritesService =
         Provider.of<FavoritesService>(context, listen: false);
 
     if (!favoritesService.isUserAuthenticated) {
-      // Показываем сообщение что нужно войти
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Войдите в аккаунт чтобы сохранять избранное'),
@@ -56,11 +55,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
           action: SnackBarAction(
             label: 'Войти',
             onPressed: () {
-              // Переходим на экран аккаунта используя публичный метод
               final homeState =
                   context.findAncestorStateOfType<HomeScreenState>();
               if (homeState != null) {
-                homeState.navigateToTab(3); // 3 - индекс аккаунта
+                homeState.navigateToTab(3);
               }
             },
           ),
@@ -211,11 +209,15 @@ class _CatalogScreenState extends State<CatalogScreen> {
                   itemCount: _filteredProducts.length,
                   itemBuilder: (context, index) {
                     final product = _filteredProducts[index];
+                    final cartService =
+                        Provider.of<CartService>(context, listen: false);
+
                     return ProductCard(
                       product: product,
                       onTap: () => _navigateToProductDetail(context, product),
                       onFavoriteToggle: () => _toggleFavorite(context, product),
                       isFavorite: _isFavorite(context, product),
+                      cartService: cartService, // ← передаём сервис
                     );
                   },
                 ),

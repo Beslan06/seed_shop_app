@@ -1,3 +1,4 @@
+// lib/services/auth_service.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'dart:convert';
@@ -35,26 +36,20 @@ class AuthService {
     try {
       print('🔄 Начинаем вход через Яндекс...');
 
-      // 1. Получаем код авторизации
       final authCode = await _getYandexAuthCode();
       if (authCode == null) return null;
 
-      // 2. Обмениваем код на access token
       final accessToken = await _exchangeYandexCodeForToken(authCode);
       if (accessToken == null) return null;
 
-      // 3. Получаем информацию о пользователе
       final userInfo = await _getYandexUserInfo(accessToken);
       if (userInfo == null) return null;
 
       print(
           '✅ Яндекс пользователь: ${userInfo['login']} (${userInfo['email']})');
 
-      // 4. Создаем кастомный токен или используем данные
-      // Пока используем анонимный вход как временное решение
+      // Для простоты — временно анонимный вход
       final userCredential = await _auth.signInAnonymously();
-
-      // Обновляем displayName если есть
       if (userInfo['real_name'] != null) {
         await userCredential.user?.updateDisplayName(userInfo['real_name']);
       }
@@ -62,8 +57,6 @@ class AuthService {
       return userCredential.user;
     } catch (e) {
       print('❌ Ошибка входа через Яндекс: $e');
-
-      // При ошибке Яндекс OAuth - предлагаем анонимный вход
       print('🔄 Используем анонимный вход вместо Яндекс');
       return await signInAnonymously();
     } finally {
@@ -83,9 +76,10 @@ class AuthService {
 
       print('🔗 Открываем OAuth: $authUrl');
 
+      // Используем схему "seedapp" — без "://", только имя схемы
       final result = await FlutterWebAuth2.authenticate(
         url: authUrl.toString(),
-        callbackUrlScheme: 'http',
+        callbackUrlScheme: 'seedapp',
       );
 
       final code = Uri.parse(result).queryParameters['code'];
@@ -99,6 +93,7 @@ class AuthService {
 
   Future<String?> _exchangeYandexCodeForToken(String authCode) async {
     try {
+      // УБРАЛ ПРОБЕЛЫ В КОНЦЕ URL!
       final response = await http.post(
         Uri.parse('https://oauth.yandex.ru/token'),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -130,6 +125,7 @@ class AuthService {
 
   Future<Map<String, dynamic>?> _getYandexUserInfo(String accessToken) async {
     try {
+      // УБРАЛ ПРОБЕЛЫ В КОНЦЕ URL!
       final response = await http.get(
         Uri.parse('https://login.yandex.ru/info'),
         headers: {'Authorization': 'OAuth $accessToken'},
@@ -149,17 +145,12 @@ class AuthService {
     }
   }
 
-  // Выход
   Future<void> signOut() async {
     if (_isLoading) return;
     _isLoading = true;
 
     try {
-      print('🔄 Выполняем выход...');
-
-      // Выход из Firebase
       await _auth.signOut();
-
       print('✅ Выход выполнен успешно');
     } catch (e) {
       print('❌ Ошибка выхода: $e');
@@ -170,6 +161,5 @@ class AuthService {
   }
 
   User? get currentUser => _auth.currentUser;
-
   bool get isLoading => _isLoading;
 }

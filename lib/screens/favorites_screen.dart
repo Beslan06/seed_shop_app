@@ -5,6 +5,7 @@ import '../models/product.dart';
 import '../widgets/product_card.dart';
 import 'product_detail_screen.dart';
 import '../services/favorites_service.dart';
+import '../services/cart_service.dart'; // ← добавили импорт
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -17,7 +18,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   void initState() {
     super.initState();
-    // Загружаем избранное при инициализации
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final favoritesService =
           Provider.of<FavoritesService>(context, listen: false);
@@ -50,9 +50,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     );
   }
 
-  // ИСПРАВЛЕННЫЙ МЕТОД: Простая навигация
   void _navigateToCatalog(BuildContext context) {
-    // Показываем сообщение что нужно перейти вручную
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Перейдите во вкладку "Каталог"'),
@@ -124,7 +122,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           ),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () => _navigateToCatalog(context), // ИСПРАВЛЕНО
+            onPressed: () => _navigateToCatalog(context),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
@@ -167,11 +165,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             itemCount: favorites.length,
             itemBuilder: (context, index) {
               final product = favorites[index];
+              final cartService = Provider.of<CartService>(context,
+                  listen: false); // ← получаем
+
               return ProductCard(
                 product: product,
                 onTap: () => _navigateToProductDetail(context, product),
                 onFavoriteToggle: () => _toggleFavorite(context, product),
                 isFavorite: true,
+                cartService: cartService, // ← передаём
               );
             },
           ),
