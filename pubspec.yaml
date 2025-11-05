@@ -12,13 +12,12 @@ dependencies:
     sdk: flutter
   
   # Firebase зависимости
-  firebase_core: ^2.32.0        # Стабильная версия
-  cloud_firestore: ^4.17.5      # Стабильная версия
-  firebase_auth: ^4.20.0        # Стабильная версия
+  firebase_core: ^4.2.0
+  cloud_firestore: ^6.0.3
+  firebase_auth: ^6.1.1       # Стабильная версия
 
   # Аутентификация
-  google_sign_in: ^6.1.5        # Стабильная версия
-  flutter_web_auth_2: ^3.1.2    # Для Яндекс OAuth
+  google_sign_in: ^7.2.0        # Стабильная версия
 
   # UI и утилиты
   cupertino_icons: ^1.0.8
@@ -27,10 +26,12 @@ dependencies:
   http: ^1.2.0
   cached_network_image: ^3.4.0
   flutter_svg: ^2.0.10
-  shared_preferences: ^2.2.2
+  shared_preferences: ^2.4.2
   collection: ^1.17.2
   go_router: ^14.0.0
   intl: ^0.19.0
+  flutter_web_auth_2: ^4.1.0
+
 
 dev_dependencies:
   flutter_test:

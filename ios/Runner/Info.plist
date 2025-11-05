@@ -43,7 +43,21 @@
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<key> UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<!-- Добавлено для поддержки OAuth callback от Яндекса -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>seedapp</string>
+			</array>
+		</dict>
+	</array>
+
 </dict>
 </plist>
